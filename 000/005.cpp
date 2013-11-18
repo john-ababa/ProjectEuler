@@ -56,5 +56,5 @@ int main(void)
 {
 	assert(problem5(10) == 2520);
 
- 	std::cout << problem5(20) << std::endl;
+	std::cout << problem5(20) << std::endl;
 }
