@@ -28,11 +28,8 @@ bool isPalindromic(int n) { return isPalindromic(std::to_string(n)); }
 std::string convBinary(int n)
 {
 	std::stringstream ss;
-
-	for( ; n >= 1; n /= 2)
+	for ( ; n > 0; n /= 2)
 		ss << n % 2;
-	if (n == 1)
-		ss << 1;
 
 	std::string str = ss.str();
 	std::reverse(str.begin(), str.end());
