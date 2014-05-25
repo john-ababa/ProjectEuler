@@ -29,7 +29,7 @@ int check(const int num)
 	return (num == sum) ? num : 0;
 }
 
-int problem45()
+int problem34()
 {
 	const int limit = factorial[9]*7;
 
@@ -43,5 +43,5 @@ int main(void)
 {
 	assert(check(145) == 145);
 
-	std::cout << problem45() << std::endl;
+	std::cout << problem34() << std::endl;
 }
