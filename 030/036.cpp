@@ -41,11 +41,8 @@ int problem36()
 	int sum = 0;
 
 	for (int n = 0; n < 1000000; ++n) {
-		if (!isPalindromic(n))
-			continue;
-		if (!isPalindromic(convBinary(n)))
-			continue;
-		sum += n;
+		if (isPalindromic(n) && isPalindromic(convBinary(n)))
+			sum += n;
 	}
 	return sum;
 }
