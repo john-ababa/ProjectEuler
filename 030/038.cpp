@@ -19,7 +19,6 @@
 #include <iostream>
 #include <algorithm>
 #include <assert.h>
-#include "../common/common.h"
 
 bool isPandigital(int num)
 {
