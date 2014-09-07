@@ -17,3 +17,4 @@ ThinkPad X61s
 - OS: CentOS 6.3 (64bit)
 - CPU: Core2Duo L7300 @1.40GHz
 - MEM: 3GB
+
