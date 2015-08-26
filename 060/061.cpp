@@ -23,12 +23,7 @@
  ******************************************************************/
 #include <iostream>
 #include <functional>
-#include <fstream>
-#include <sstream>
-#include <string>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 
 std::vector<std::function<int(int)>> polygonal_vec = {
 	[] (int n) { return n*(n+1)/2;   },
