@@ -37,7 +37,7 @@ int checkRoute(std::vector<std::vector<int>>& v)
 	return *std::max_element(v[99].begin(), v[99].end());
 }
 
-int problem66(void)
+int problem67(void)
 {
 	std::vector<std::vector<int>> vec;
 	std::ifstream ifs("triangle.txt");
@@ -55,5 +55,5 @@ int problem66(void)
 
 int main(void)
 {
-	std::cout << problem66() << std::endl;
+	std::cout << problem67() << std::endl;
 }
