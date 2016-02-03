@@ -3,7 +3,7 @@
 
 CXX = g++
 CXXFLAGS = -O0 -Wall -Wextra -std=c++11
-PROGRAM = 070 071 072 073 074 075
+PROGRAM = 070 071 072 073 074 075 076
 all: $(PROGRAM)
 
 070: 070.o
@@ -18,6 +18,8 @@ all: $(PROGRAM)
 074.o: 074.cpp
 075: 075.o
 075.o: 075.cpp
+076: 076.o
+076.o: 076.cpp
 
 clean:
 	rm -f $(PROGRAM) *.o
