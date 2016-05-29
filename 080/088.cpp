@@ -23,17 +23,12 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
-#include <climits>
-#include <set>
 #include "../common/common.h"
 
-//#define debug
-//#define right_d
-
-template < class BidirectionalIterator >
+template <class BidirectionalIterator>
 bool next_combination(
-		BidirectionalIterator first1, BidirectionalIterator last1,
-		BidirectionalIterator first2, BidirectionalIterator last2)
+	BidirectionalIterator first1, BidirectionalIterator last1,
+	BidirectionalIterator first2, BidirectionalIterator last2)
 {
 	if ((first1 == last1) || (first2 == last2)) {
 		return false;
@@ -53,6 +48,7 @@ bool next_combination(
 		++first1;
 		++first2;
 	}
+
 	if ((first1 != last1) && (first2 != last2)) {
 		m1 = last1; m2 = first2;
 		while ((m1 != first1) && (m2 != last2)) {
@@ -77,7 +73,6 @@ bool next_combination(
 std::vector<int> factorization(int n)
 {
 	std::vector<int> vec;
-
 	for (int i = 2; n != 1 && i != n; i+=1) {
 		while (n % i == 0) {
 			vec.push_back(i);
@@ -89,206 +84,87 @@ std::vector<int> factorization(int n)
 	return vec;
 }
 
-bool right(std::vector<int> data, int k, int r, const int mult, int lm, int ld)
+bool right(std::vector<int> f, const int k, const int M, const int mult, int lm, int ld)
 {
-	std::vector<int> data_r(data.begin()+r, data.end());
+	std::vector<int> fn(f.begin()+M, f.end());
 
-	//for (size_t i = 0; i < data_r.size(); ++i) {
-	//	std::cout << data_r[i] << " ";
-	//}
-	//std::cout << std::endl;
-
-	//const int m = std::accumulate(data.begin(), data.end(), 1, std::multiplies<int>());
-	for (size_t R = 2; R <= data_r.size(); ++R) {
+	for (size_t m = 2; m <= fn.size(); ++m) {
 		do {
-			//std::cout << R << std::endl;
-#ifdef debug
-			if (ld >= 2)
-				std::cout << "\t";
-			std::cout << "\t\t[ " << data_r[0];
-			for(unsigned int i=1; i<R; ++i){
-				std::cout << ", " << data_r[i];
-			}
-			std::cout << " ]" << std::flush;
-			std::cout << " (";
-			for(unsigned int i=R; i<data_r.size(); ++i){
-				std::cout << ", " << data_r[i];
-			}
-			std::cout << " )]" << std::endl;
-#endif
-
-			const int rm = std::accumulate(data_r.begin(), data_r.begin()+R, 1, std::multiplies<int>());
-			const int rsum = std::accumulate(data_r.begin()+R, data_r.end(), 0);
-			const int rm2 = std::accumulate(data_r.begin()+R, data_r.end(), 1, std::multiplies<int>());
-
-			//const int ld = k - 1;
-			//const int rd = R-1 + ((int)data_r.size() - R);
-
-			//const int ld = 1;
-			const int rd = 1 + ((int)data_r.size() - R);
-			const int lrd = k - ld - rd;
-
-#ifdef right_d
-			std::cout << mult << " | lm = " << lm << " | rm= " << rm << " | rm2=" << rm2 << " | rsum= " << rsum << std::endl;
-			std::cout << lm+rm+rsum+lrd << " |\t"<< k << "\t" << r << "\t" << R << "\t" << lrd << "\t" <<  ld << "\t" << rd << std::endl;
-#endif
-
-			if (lm+rm+rsum+lrd == mult)
-				return true;
-			if (lm+rm+rm2+k-2-ld == mult)
+			const int rm = std::accumulate(fn.begin(), fn.begin()+m, 1, std::multiplies<int>());
+			const int rsum = std::accumulate(fn.begin()+m, fn.end(), 0);
+			const int ad = k - ld - (1 + ((int)fn.size() - m));
+			if (lm + rm + rsum + ad == mult)
 				return true;
 
-			if (3 <= (int)data_r.size() - R) {
-				//const int lm2 = mult / std::accumulate(data.begin()+r, data.end(), 1, std::multiplies<int>());
-				//const int lm2 = std::accumulate(data_r.begin(), data_r.begin()+r, 1, std::multiplies<int>());
-				const int lm2 = std::accumulate(data_r.begin(), data_r.begin()+R, 1, std::multiplies<int>());
-				//std::cout << "oppai" << std::endl;
-				if (right(data_r, k, R, mult, lm2+lm, ld+1))
+			const int rm2 = std::accumulate(fn.begin()+m, fn.end(), 1, std::multiplies<int>());
+			const int ad2 = k - 2 - ld;
+			if (lm + rm + rm2 + ad2 == mult)
+				return true;
+
+			if (3 <= (int)fn.size() - m) {
+				const int lm2 = std::accumulate(fn.begin(), fn.begin()+m, 1, std::multiplies<int>());
+				if (right(fn, k, m, mult, lm2+lm, ld+1))
 					return true;
 			}
-
-		} while (next_combination(data_r.begin(), data_r.begin()+R, data_r.end()));
+		} while (next_combination(fn.begin(), fn.begin()+m, fn.end()));
 	}
 	return false;
 }
 
-bool left(std::vector<int>& data, int k, int r, const int mult)
+bool left(std::vector<int>& f, const int k, const int m, const int mult)
 {
-	const int tmp = std::accumulate(data.begin(), data.begin()+r, 1, std::multiplies<int>());
-	const int rsum = std::accumulate(data.begin()+r, data.end(), 0);
+	const int rmul = std::accumulate(f.begin(), f.begin()+m, 1, std::multiplies<int>());
+	const int rsum = std::accumulate(f.begin()+m, f.end(), 0);
+	const int ad = [&]{
+		const int s = f.size();
+		if (m == 1)
+			return (k >= s) ? k - s : s - k;
+		else
+			return k - (1 + s - m);
+	}();
 
-	int d = 0;
-	if (r == 1)
-		d = (k >= data.size()) ? k - data.size() : data.size() - k;//std::abs(k - (int)data.size());
-		//d = std::abs(k - (int)data.size());
-	else
-		d = k - (1 + data.size() - r);
-		//d = (k >= r) ? k - r : (r - k);
-		//d = std::abs(k - r);
-
-#ifdef debug
-	std::cout << mult << "\t|" << k << "\t| r = " << r << "\t@ " << tmp << "\t" << rsum << "\t" << d << std::endl;
-#endif
-	if (tmp+rsum+d == mult)
+	if (rmul + rsum + ad == mult)
 		return true;
 	return false;
 }
 
-int test(std::vector<int> data, int k)//, int r)
+int check(std::vector<int> f, int k)
 {
-	const int mult = std::accumulate(data.begin(), data.end(), 1, std::multiplies<int>());
-	for (size_t R = 1; R <= data.size(); ++R) {
-		int r = R;
+	const int mult = std::accumulate(f.begin(), f.end(), 1, std::multiplies<int>());
+
+	for (size_t m = 1; m <= f.size(); ++m) {
 		do {
-#ifdef debug
-			std::cout << "[ " << data[0];
-			for(unsigned int i=1; i<r; ++i){
-				std::cout << ", " << data[i];
-			}
-			std::cout << " ]" << std::flush;
-			std::cout << " (";
-			for(unsigned int i=r; i<data.size(); ++i){
-				std::cout << ", " << data[i];
-			}
-			std::cout << " )]" << std::endl;
-#endif
-
-			if (left(data, k, r, mult) == true)
+			if (left(f, k, m, mult) == true)
 				return mult;
 
-			const int lm = mult / std::accumulate(data.begin()+r, data.end(), 1, std::multiplies<int>());
-			if (right(data, k, r, mult, lm, 1) == true)
+			const int lm = mult / std::accumulate(f.begin()+m, f.end(), 1, std::multiplies<int>());
+			if (right(f, k, m, mult, lm, 1) == true)
 				return mult;
-
-		} while (next_combination(data.begin(), data.begin()+r, data.end()));
+		} while (next_combination(f.begin(), f.begin()+m, f.end()));
 	}
-
 	return 0;
 }
 
-
-int run(void)
+int problem88(void)
 {
-	std::vector<int> primes;
-	for (int i = 2; i < 30000; ++i) {
-		if (!Euler::isPrime(i))
-			primes.push_back(i);
-	}
-	//std::vector<int> result(1001, 0);
 	std::vector<int> result(12001, 0);
 
-	for (size_t i = 0; i < primes.size(); ++i) {
-	//for (size_t i = 70; i < 110; ++i) {
-		std::vector<int> f = factorization(primes[i]);
-#if 1
-		std::cout << "# "<< i << " @ " << primes[i] << " | " << std::flush;
-		for (size_t i = 0; i < f.size(); ++i)
-			std::cout << f[i] << " ";
-		std::cout << std::endl;
-#endif
+	for (size_t i = 2; i < 30000; ++i) {
+		if (Euler::isPrime(i))
+			continue;
 
-		//for (int k = 90; k <= 118; ++k) {
-			//if (k == 90 || k == 118)
+		const std::vector<int> f = factorization(i);
 		for (int k = 2; k <= 12000; ++k) {
-			if (result[k] == 0) {
-				result[k] = test(f, k);
-			}
+			if (result[k] == 0)
+				result[k] = check(f, k);
 		}
 	}
-
-	std::set<int> s;
-	for (size_t i = 0; i < result.size(); ++i) {
-		std::cout << i << "\t" << result[i] << std::endl;
-		s.insert(result[i]);
-	}
-	std::cout << std::endl;
-
-	int sum = 0;
-	for (auto itr = s.begin(); itr != s.end(); ++itr)
-		sum += *itr;
-	return sum;
+	std::sort(result.begin(), result.end());
+	result.erase(std::unique(result.begin(), result.end()), result.end());
+	return std::accumulate(result.begin(), result.end(), 0);
 }
 
 int main(void)
 {
-	std::cout << run() << std::endl;
-	//assert(problem87(50) == 4);
-
-	//std::cout << problem() << std::endl;
-	//std::cout << problem2() << std::endl;
-
-	//std::vector<int> f = factorization(8);
-	//for (int i = 0; i < f.size(); ++i)
-	//	std::cout << f[i] << " ";
-	//std::cout << std::endl;
-
-	//std::vector<int> v1 = {2, 7, 7};
-	//std::vector<int> v2 = {};
-	//int r = 3, k = 11;
-	//int p1 = std::accumulate(v1.begin(), v1.end(), 1, std::multiplies<int>());
-	//std::cout << " X " << p1 << std::endl;
-	//int s1 = (r == 0) ? 0 : p1;
-	//std::cout << " X " << s1 << std::endl;
-
-	//int p2 = std::accumulate(v2.begin(), v2.end(), 1, std::multiplies<int>());
-	//std::cout << " X " <<  p2 << std::endl;
-	//int s2 = std::accumulate(v2.begin(), v2.end(), 0) + ((r == 0) ? 0 : (k - r));
-	//std::cout << " X " <<  s2 << std::endl;
-
-	//isOK(3, 1, f);
-	//isOK(3, 2, f);
-
-	//std::vector<int> a1(f.begin(), f.begin()+0);
-	//for (int i = 0; i < a1.size(); ++i)
-	//	std::cout << a1[i] << " ";
-	//std::cout << std::endl;
-	//int p1 = std::accumulate(a1.begin(), a1.end(), 1, std::multiplies<int>());
-	//std::cout << p1 << std::endl;
-
-
-	//std::vector<int> a2(f.begin()+0, f.end());
-	//for (int i = 0; i < a2.size(); ++i)
-	//	std::cout << a2[i] << " ";
-	//std::cout << std::endl;
-	return 0;
+	std::cout << problem88() << std::endl;
 }
