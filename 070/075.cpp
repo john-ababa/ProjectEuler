@@ -22,6 +22,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 int GCD(int m, int n)
 {

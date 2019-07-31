@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 #include <assert.h>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/constants/constants.hpp>

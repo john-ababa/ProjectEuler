@@ -15,6 +15,7 @@
  ******************************************************************/
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 #include <vector>
 
 int primeFactor(int n)

@@ -17,6 +17,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <vector>
 #include <assert.h>
 
 std::vector<int> split(const std::string &str, char delim)

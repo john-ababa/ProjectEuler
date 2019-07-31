@@ -20,6 +20,7 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 #include <assert.h>
 
 template <class T>

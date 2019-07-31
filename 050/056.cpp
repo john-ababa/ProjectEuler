@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <numeric>
 #include "../common/bignum.hpp"
 
 int sumDigital(const std::string& str)

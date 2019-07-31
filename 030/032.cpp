@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <numeric>
 #include <set>
 
 void solve(std::set<int>& result, int n1, int n2, int n3, int n4)
